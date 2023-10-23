@@ -1,3 +1,5 @@
 venv/
 django_api/db*
-*__pycache__*
+django_graphene/db*
+*__pycache__
+*node_modules
