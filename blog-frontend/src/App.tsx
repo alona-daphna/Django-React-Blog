@@ -1,49 +1,28 @@
-import { useEffect, useState } from 'react';
-import { useQuery } from '@apollo/client';
-import { GET_ARTICLE } from './api.js';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
-export type Article = {
-  id: Number;
-  title: string;
-  content: string;
-};
+import { Home } from './views/Home';
+import { AdminLogin } from './views/AdminLogin';
+import { ArticleMeta } from './views/ArticleMeta';
+import { ArticlePreview } from './views/ArticlePreview';
+import { ArticleRead } from './views/ArticleRead';
+import { Markdown } from './views/Markdown';
+import { PrivateRoute } from './utils/PrivateRoute';
 
 function App() {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [currArticle, setCurrArticle] = useState<Article | null>(null);
-  const { refetch } = useQuery(GET_ARTICLE, {
-    skip: true,
-  });
-
-  const handleClick = async () => {
-    try {
-      const result = await refetch({ id: 2 });
-      setCurrArticle(result.data.articleById);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  useEffect(() => {
-    const fetchArticles = async () => {
-      const response = await fetch('http://localhost:8000/blog');
-      const json = await response.json();
-      setArticles(json.articles);
-    };
-
-    fetchArticles();
-  }, []);
-
   return (
-    <>
-      <h1>React + Django Blog App</h1>
-      <button onClick={handleClick}>fetch single article</button>
-      {articles.map((article: Article) => (
-        <p key={article.id}>{article.title}</p>
-      ))}
-      <br />
-      {currArticle && <p>{currArticle.content}</p>}
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<PrivateRoute />}>
+          <Route path="/edit/markdown" element={<Markdown />} />
+          <Route path="/edit/meta" element={<ArticleMeta />} />
+          <Route path="/edit/preview" element={<ArticlePreview />} />
+        </Route>
+        <Route path="/" element={<Home />} />
+        <Route path="/read/:ArticleId" element={<ArticleRead />} />
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route path="*" element={<Navigate to={'/'} />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
