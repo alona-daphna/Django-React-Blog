@@ -6,7 +6,6 @@ export const Home = () => {
   return (
     <>
       <Navbar />
-      <div>Home</div>
     </>
   );
 };
