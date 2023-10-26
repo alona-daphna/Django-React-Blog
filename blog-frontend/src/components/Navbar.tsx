@@ -5,7 +5,7 @@ import { useContext } from 'react';
 // different configurations for different routes
 export const Navbar = () => {
   const navigate = useNavigate();
-  const isAdmin = localStorage.getItem('token') || true;
+  const isAdmin = localStorage.getItem('token');
   const { setFromPage } = useContext(ArticleEditContext)!;
 
   const handleCreateClick = () => {

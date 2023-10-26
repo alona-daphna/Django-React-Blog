@@ -2,11 +2,36 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  ApolloLink,
+  createHttpLink,
+} from '@apollo/client';
+
+const authLink = new ApolloLink((operation, forward) => {
+  if (
+    operation.operationName === 'UpdateArticle' ||
+    operation.operationName === 'CreateArticle'
+  ) {
+    const token = localStorage.getItem('token');
+    operation.setContext({
+      headers: {
+        authorization: token ? `Bearer ${token}` : '',
+      },
+    });
+  }
+  return forward(operation);
+});
+
+const httpLink = createHttpLink({
+  uri: 'http://localhost:8000/blog/graphql',
+});
 
 const client = new ApolloClient({
-  uri: 'http://localhost:8000/blog/graphql',
   cache: new InMemoryCache(),
+  link: authLink.concat(httpLink),
 });
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

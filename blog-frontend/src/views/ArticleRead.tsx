@@ -14,7 +14,7 @@ export const ArticleRead = () => {
   const { setFromPage } = useContext(ArticleEditContext)!;
   const [deleteArticle] = useMutation(DELETE_ARTICLE);
 
-  let admin = true;
+  let admin = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -32,7 +32,7 @@ export const ArticleRead = () => {
 
   const handleDeleteClick = async () => {
     try {
-      const { data } = await deleteArticle({
+      await deleteArticle({
         variables: {
           id: articleId,
         },

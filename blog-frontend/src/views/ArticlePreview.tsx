@@ -24,7 +24,7 @@ export const ArticlePreview = () => {
   const handleUpload = async (e) => {
     if (articleId) {
       try {
-        const { data } = await updateArticle({
+        await updateArticle({
           variables: {
             input: {
               id: articleId,
@@ -52,7 +52,6 @@ export const ArticlePreview = () => {
           },
         });
         reset();
-        console.log(data.createArticle.article.id);
         navigate(`/read/${data.createArticle.article.id}`);
       } catch (error) {
         console.log('GraphQL Create Mutation Error: ' + error);

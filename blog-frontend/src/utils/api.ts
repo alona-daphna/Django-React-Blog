@@ -60,7 +60,7 @@ export const UPDATE_ARTICLE = gql`
 `;
 
 export const CREATE_ARTICLE = gql`
-  mutation ($input: CreateArticleInput!) {
+  mutation CreateArticle($input: CreateArticleInput!) {
     createArticle(input: $input) {
       article {
         id
