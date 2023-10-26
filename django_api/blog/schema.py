@@ -3,7 +3,42 @@ from graphene_django import DjangoObjectType
 from graphql import GraphQLError
 from .models import Article
 from django import forms
+import jwt
+import os
+from dotenv import load_dotenv
 
+
+class InvalidTokenError(BaseException):
+    pass
+
+def validate_token(token):
+    load_dotenv()
+
+    try:
+        return jwt.decode(token, os.getenv('JWT_SECRET'), algorithms=['HS256'])
+    except jwt.ExpiredSignatureError:
+        raise InvalidTokenError("Token has expired")
+    except jwt.DecodeError:
+        raise InvalidTokenError("Invalid token")
+
+def authorize(authorization_header):
+    token = None
+
+    if authorization_header:
+        parts = authorization_header.split()
+        if len(parts) == 2 and parts[0].lower() == 'bearer':
+            token = parts[1]
+    else:
+        raise GraphQLError("Unauthorized")
+
+    if not token:
+        raise GraphQLError('Unauthorized')
+    
+    try:
+        validate_token(token)
+    except InvalidTokenError:
+        raise GraphQLError("Invalid Token")
+    
 
 class ArticleForm(forms.ModelForm):
     class Meta:
@@ -37,6 +72,8 @@ class CreateArticle(graphene.Mutation):
 
     def mutate(root, info, input):
         try :
+            authorize(info.context.META.get('HTTP_AUTHORIZATION', None))
+
             article = Article()
 
             for k, v in input.items():
@@ -55,10 +92,12 @@ class UpdateArticle(graphene.Mutation):
     article = graphene.Field(ArticleType)
 
     def mutate(root, info, input):
-        form = ArticleForm(input)
+        try:
+            authorize(info.context.META.get('HTTP_AUTHORIZATION', None))
 
-        if form.is_valid():
-            try:
+            form = ArticleForm(input)
+
+            if form.is_valid():
                 article = Article.objects.get(pk=input.id)   
 
                 for k, v in input.items():
@@ -66,13 +105,13 @@ class UpdateArticle(graphene.Mutation):
 
                 article.save() 
                 return UpdateArticle(article=article)
-            except Article.DoesNotExist:
-                raise GraphQLError("Article not found")
-            except Exception as e:
-                raise GraphQLError(f'Failed to update article: {str(e)}')
-        else:
-            raise GraphQLError("Validation failed: " +str(form.errors))
-    
+            else:
+                raise GraphQLError("Validation failed: " +str(form.errors))
+        except Article.DoesNotExist:
+            raise GraphQLError("Article not found")
+        except Exception as e:
+            raise GraphQLError(f'Failed to update article: {str(e)}')
+
 
 class DeleteArticle(graphene.Mutation):
     class Arguments:
@@ -82,6 +121,7 @@ class DeleteArticle(graphene.Mutation):
 
     def mutate(root, info, id):
         try:
+            authorize(info.context.META.get('HTTP_AUTHORIZATION', None))
             article = Article.objects.get(pk=id)
             article.delete()
             return DeleteArticle(article=article)

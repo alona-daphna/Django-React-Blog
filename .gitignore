@@ -4,3 +4,4 @@ django_graphene/db*
 *__pycache__
 *node_modules
 /blog-frontend/src/assets
+*.env

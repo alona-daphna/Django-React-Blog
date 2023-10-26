@@ -4,43 +4,38 @@ from .serializers import ArticleSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+import json
+import jwt
+import os
+from dotenv import load_dotenv
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def articles(request):
+    all_articles = Article.objects.all()
+    serializer = ArticleSerializer(all_articles, many=True)
+    return JsonResponse({'articles': serializer.data})
 
-    if request.method == 'GET':
-        all_articles = Article.objects.all()
-        serializer = ArticleSerializer(all_articles, many=True)
-        return JsonResponse({'articles': serializer.data})
 
-    if request.method == 'POST':
-        serializer = ArticleSerializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['GET', 'PATCH', 'DELETE'])
+@api_view(['GET'])
 def article_detail(request, id):
-
+    print('GET')
     try:
         article = Article.objects.get(pk=id)
     except Article.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'GET': 
-        serializer = ArticleSerializer(article)
-        return JsonResponse(serializer.data)
+    serializer = ArticleSerializer(article)
+    return JsonResponse(serializer.data)
     
-    elif request.method == 'PATCH':
-        serializer = ArticleSerializer(article, data=request.data, partial=True)
+    
+@api_view(['POST'])
+def generate_token(request):
+    data = json.loads(request.body.decode('utf-8'))
+    secret = data.get('secret')
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    if secret == os.getenv('ADMIN_SECRET'):
+        token = jwt.encode({}, os.getenv('JWT_SECRET'), algorithm='HS256')
 
-    elif request.method == 'DELETE':
-        article.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return JsonResponse({'token': token})
+    else:
+        return JsonResponse({'error': 'Invalid secret'}, status=401)
