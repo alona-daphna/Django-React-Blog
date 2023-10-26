@@ -26,6 +26,16 @@ export const fetchArticleById = async (articleId: Number) => {
   return response.json();
 };
 
+export const adminLogin = async (secret: String) => {
+  return fetch(BASE_URL + 'admin-login/', {
+    method: 'POST',
+    body: JSON.stringify({ secret }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
 // GRAPHQL
 export const GET_ARTICLES_NO_CONTENT = gql`
   query {
