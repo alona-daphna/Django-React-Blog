@@ -70,7 +70,7 @@ export const CREATE_ARTICLE = gql`
 `;
 
 export const DELETE_ARTICLE = gql`
-  mutation ($id: ID!) {
+  mutation DeleteArticle($id: ID!) {
     deleteArticle(id: $id) {
       article {
         title

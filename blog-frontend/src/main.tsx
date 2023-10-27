@@ -13,9 +13,11 @@ import {
 const authLink = new ApolloLink((operation, forward) => {
   if (
     operation.operationName === 'UpdateArticle' ||
-    operation.operationName === 'CreateArticle'
+    operation.operationName === 'CreateArticle' ||
+    operation.operationName === 'DeleteArticle'
   ) {
     const token = localStorage.getItem('token');
+
     operation.setContext({
       headers: {
         authorization: token ? `Bearer ${token}` : '',

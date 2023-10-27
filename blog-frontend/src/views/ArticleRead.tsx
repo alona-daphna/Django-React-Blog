@@ -38,7 +38,7 @@ export const ArticleRead = () => {
         },
       });
 
-      navigate(-1);
+      navigate('/read');
     } catch (error) {
       console.log('GraphQL Delete Mutation Error: ' + error);
     }

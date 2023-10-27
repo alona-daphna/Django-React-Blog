@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import { ArticleEditContext } from '../context/ArticleEditContext';
 import { useContext } from 'react';
 
-// different configurations for different routes
 export const Navbar = () => {
   const navigate = useNavigate();
   const isAdmin = localStorage.getItem('token');

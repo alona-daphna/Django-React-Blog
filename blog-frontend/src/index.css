@@ -263,6 +263,10 @@ textarea:focus {
   flex-direction: column;
 }
 
+.article-markdown .preview img {
+  max-width: 200px;
+}
+
 @media screen and (max-width: 800px) {
   .article-markdown {
     display: grid;
@@ -389,4 +393,19 @@ hr {
 .preview-page .content h2,
 h1 {
   margin-bottom: 10px;
+}
+
+/* HOME */
+.home-container {
+  margin: auto;
+  max-width: 45rem;
+  padding: 0 3rem;
+}
+
+.home-container section {
+  /* background: #fff; */
+}
+
+.home-container section h1 {
+  font-size: 4rem;
 }
