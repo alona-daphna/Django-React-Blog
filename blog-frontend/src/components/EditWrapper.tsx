@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { ArticleEditContext } from '../context/ArticleEditContext';
+import { ThemeToggle } from './ThemeToggle';
 
 export const EditWrapper = ({
   previous,
@@ -25,6 +26,7 @@ export const EditWrapper = ({
     <div className="edit-wrapper">
       <div className="edit-nav">
         <h1 onClick={handleBackClick}>&lt; {prevTitle}</h1>
+        <ThemeToggle />
       </div>
       {children}
       <div className="bottom-action">

@@ -158,8 +158,7 @@ textarea:focus {
 }
 
 .article-read .description {
-  color: rgba(255, 255, 255, 0.6);
-  font-weight: 300;
+  color: var(--text-color-faded);
   line-height: 1.3rem;
   padding: 0px 20px 30px;
 }
@@ -188,6 +187,13 @@ textarea:focus {
 }
 
 /* EDIT WRAPPER */
+
+.edit-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  align-items: center;
+}
 
 .bottom-action {
   display: flex;
@@ -272,7 +278,7 @@ textarea:focus {
 }
 
 .article-markdown .preview {
-  background: #fff;
+  background: var(--background-light);
   color: #000;
   border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
