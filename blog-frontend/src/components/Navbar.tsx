@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { ArticleEditContext } from '../context/ArticleEditContext';
 import { useContext } from 'react';
+import { ThemeToggle } from './ThemeToggle';
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -27,6 +28,9 @@ export const Navbar = () => {
             </button>
           </li>
         )}
+        <li>
+          <ThemeToggle />
+        </li>
       </ul>
     </div>
   );
