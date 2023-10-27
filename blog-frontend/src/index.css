@@ -147,6 +147,7 @@ textarea:focus {
   width: 600px;
   margin: auto;
   padding-top: 20px;
+  padding-bottom: 40px;
 }
 
 .article-read h1 {
@@ -186,6 +187,10 @@ textarea:focus {
   font-size: 2rem;
 }
 
+.article-read .content {
+  line-height: 1.5rem;
+}
+
 /* EDIT WRAPPER */
 
 .edit-nav {
@@ -213,7 +218,7 @@ textarea:focus {
 .all-articles {
   margin: auto;
   max-width: 35rem;
-  padding: 0 3rem;
+  padding: 0 3rem 10rem;
 }
 
 .article-card .content {
@@ -391,6 +396,7 @@ hr {
   margin-top: 2px;
   border-radius: 6px;
   padding: 24px;
+  overflow-y: scroll;
 }
 
 @media screen and (max-width: 800px) {
@@ -411,7 +417,7 @@ hr {
 }
 
 .preview-page .container .description {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-color-faded);
   margin-bottom: 20px;
   padding: 0 15px;
 }

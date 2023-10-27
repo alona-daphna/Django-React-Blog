@@ -57,7 +57,7 @@ export const ArticleRead = () => {
         <h1 className="title">{article?.title}</h1>
         <div className="description">{article?.description}</div>
         <div className="actions">
-          <p className="date">Oct 24, 2023</p>
+          <p className="date">{new Date(article?.createdAt).toDateString()}</p>
           <div>
             <span>👏 131</span>
           </div>
